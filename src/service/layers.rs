@@ -203,11 +203,13 @@ impl<S> Service<Request> for ExitService<S> {
         }
     }
 
+    #[allow(unreachable_code)]
     fn call(&mut self, _: Request) -> Self::Future {
         info!("exit notification received, stopping");
         self.state.set(State::Exited);
         self.pending.cancel_all();
         self.client.close();
+        std::process::exit(0);
         future::ok(None)
     }
 }
